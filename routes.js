@@ -4,7 +4,6 @@ const { authenticateUser } = require('./middleware/auth-user')
 const User = require('./models').Users
 const Course = require('./models').Courses
 
-
 //
 function sqlValidation (res, error) {
   if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
@@ -38,7 +37,7 @@ router.get('/users', authenticateUser, asyncHandler(async (req, res) => {
 // POST route that creates a new user
 router.post('/users', asyncHandler(async (req, res) => {
   try {
-    if (req.body.password.length === 0) {
+    if (req.body.password.trim().length === 0) {
       delete req.body.password
     }
     await User.create(req.body)
@@ -101,7 +100,7 @@ router.post('/courses', authenticateUser, asyncHandler(async (req, res) => {
       const newCourse = await Course.create(req.body)
       res.redirect(201, '/courses/' + newCourse.id)
     } catch (error) {
-     sqlValidation(res, error)
+      sqlValidation(res, error)
     }
   }
 }))
