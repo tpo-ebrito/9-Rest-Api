@@ -33,6 +33,12 @@ app.use((req, res) => {
 app.use((err, req, res, next) => {
   console.error(`Global error handler: ${JSON.stringify(err.stack)}`)
 
+  if (err.message.includes('missing')) {
+    res.status(400).json({
+      message: err.message
+    })
+    return
+  }
   res.status(500).json({
     message: err.message,
     error: process.env.NODE_ENV === 'production' ? {} : err
