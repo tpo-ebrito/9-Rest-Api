@@ -36,17 +36,6 @@ router.get('/users', authenticateUser, asyncHandler(async (req, res) => {
 
 // POST route that creates a new user
 router.post('/users', asyncHandler(async (req, res) => {
-  if (!req.body) {
-    throw new Error('One or more required fields are missing a value')
-  }
-
-  const required = ['firstName', 'lastName', 'emailAddress', 'password']
-  required.forEach(prop => {
-    if (!req.body[prop]) {
-      throw new Error('One or more required fields are missing a value')
-    }
-  })
-
   try {
     await User.create(req.body)
     res.redirect(201, '/')
